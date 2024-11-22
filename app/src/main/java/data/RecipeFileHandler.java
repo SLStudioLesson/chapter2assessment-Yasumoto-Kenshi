@@ -1,5 +1,9 @@
 package data;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -21,14 +25,18 @@ public class RecipeFileHandler {
      *
      * @return レシピデータ
      */
-    public ArrayList<String> readRecipes() {
-        // try {
-
-        // } catch (IOException e) {
-        //     System.out.println("Error reading file:" + e.getMessage());
-        // }
-        return null;
+    public ArrayList<String> readRecipes() { //メソッドの宣言
+    ArrayList<String> recipes = new ArrayList<>(); //レシピデータを格納するリストを作成する
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line; //ファイルを1行ずつ読む準備
+        while ((line = reader.readLine()) != null) { // ファイルを1行ずつ読み込む
+            recipes.add(line); // 読み込んだ行をリストに追加
+        }
+    } catch (IOException e) { //例外が発生した場合の処理
+        System.out.println("Error reading file: " + e.getMessage()); // エラーメッセージを表示する
     }
+    return recipes; // 読み込んだレシピデータを返す
+}
 
     /**
      * 設問2: 新規登録機能
@@ -38,12 +46,14 @@ public class RecipeFileHandler {
      * @param recipeName レシピ名
      * @param ingredients 材料名
      */
-     // 
-    public void addRecipe(String recipeName, String ingredients) {
-        // try {
-
-        // } catch (IOException e) {
-
-        // }
+     //
+    public void addRecipe(String recipeName, String ingredients) { //メソッドの宣言
+        String newRecipe = recipeName + "," + ingredients; // レシピをカンマ区切り形式で作成
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(newRecipe); //レシピデータを書き込む
+            writer.newLine(); // 改行を追加する
+        } catch (IOException e) { //例外が発生した場合の処理
+            System.out.println("Error writing to file: " + e.getMessage()); //エラーメッセージを表示する
+        }
     }
 }
